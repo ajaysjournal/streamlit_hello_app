@@ -17,7 +17,7 @@ class AppConfig(BaseModel):
             "primary_color": "#FF6B6B",
             "background_color": "#FFFFFF",
             "secondary_background_color": "#F0F2F6",
-            "text_color": "#262730",
+            "text_color": "#404040",
         },
         description="UI theme configuration"
     )

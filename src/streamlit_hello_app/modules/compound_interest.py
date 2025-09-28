@@ -96,20 +96,23 @@ def render_compound_interest_calculator() -> None:
         )
     
     with col2:
-        compounding_freq = st.selectbox(
+        compounding_freq_options = {
+            "Annually": 1,
+            "Semi-annually": 2,
+            "Quarterly": 4,
+            "Monthly": 12,
+            "Weekly": 52,
+            "Daily": 365
+        }
+        
+        compounding_freq_label = st.selectbox(
             "Compounding Frequency",
-            options=[
-                (1, "Annually"),
-                (2, "Semi-annually"),
-                (4, "Quarterly"),
-                (12, "Monthly"),
-                (52, "Weekly"),
-                (365, "Daily")
-            ],
-            format_func=lambda x: x[1],
-            index=3,  # Default to monthly
+            options=list(compounding_freq_options.keys()),
+            index=3,  # Default to "Monthly"
             help="How often interest is compounded"
-        )[0]
+        )
+        
+        compounding_freq = compounding_freq_options[compounding_freq_label]
         
         monthly_contribution = st.number_input(
             "Monthly Contribution ($)",
@@ -224,7 +227,6 @@ def render_compound_interest_calculator() -> None:
             
             st.dataframe(
                 breakdown_df,
-                width='stretch',
                 hide_index=True
             )
             

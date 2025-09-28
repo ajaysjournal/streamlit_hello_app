@@ -39,10 +39,10 @@ def apply_dark_theme() -> None:
         color: #FAFAFA !important;
     }
     .stSidebar {
-        background-color: #262730 !important;
+        background-color: #404040 !important;
     }
     .stSidebar * {
-        background-color: #262730 !important;
+        background-color: #404040 !important;
         color: #FAFAFA !important;
     }
     .stButton > button {
@@ -54,18 +54,18 @@ def apply_dark_theme() -> None:
         background-color: #FF5252 !important;
     }
     .stSelectbox > div > div {
-        background-color: #262730 !important;
+        background-color: #404040 !important;
         color: #FAFAFA !important;
     }
     .stCheckbox > div > div {
-        background-color: #262730 !important;
+        background-color: #404040 !important;
     }
     .stMetric {
-        background-color: #262730 !important;
+        background-color: #404040 !important;
         color: #FAFAFA !important;
     }
     .stDataFrame {
-        background-color: #262730 !important;
+        background-color: #404040 !important;
         color: #FAFAFA !important;
     }
     h1, h2, h3, h4, h5, h6, p, div, span, label {
