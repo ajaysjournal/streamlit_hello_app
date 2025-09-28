@@ -10,8 +10,9 @@ A modern Python web application built with Streamlit, featuring Python 3.11+ sup
 - 📊 **Interactive visualizations** with Plotly
 - 🔧 **Clean architecture** with Pydantic models
 - 📈 **Data exploration** capabilities
+- 💰 **Compound Interest Calculator** for financial planning
 - 🎛️ **Configurable themes** and settings
-- 📁 **Modern project structure** with src layout
+- 📁 **Modular project structure** with organized pages
 
 ## ✅ Project Status
 

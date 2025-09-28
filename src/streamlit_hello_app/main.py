@@ -13,10 +13,13 @@ from streamlit_hello_app.utils import setup_logging, load_environment, get_proje
 from streamlit_hello_app.components import (
     render_header,
     render_sidebar,
+    apply_dark_theme,
+)
+from streamlit_hello_app.modules import (
     render_dashboard,
     render_data_explorer,
+    render_compound_interest_calculator,
     render_about,
-    apply_theme,
 )
 
 
@@ -27,7 +30,21 @@ def configure_page() -> None:
         page_icon="🚀",
         layout="wide",
         initial_sidebar_state="expanded",
+        menu_items={
+            'Get Help': None,
+            'Report a bug': None,
+            'About': None
+        }
     )
+    
+    # Minimal CSS to hide only essential elements
+    st.markdown("""
+    <style>
+    #MainMenu {visibility: hidden;}
+    footer {visibility: hidden;}
+    .stDeployButton {display:none;}
+    </style>
+    """, unsafe_allow_html=True)
 
 
 def main() -> None:
@@ -53,129 +70,14 @@ def main() -> None:
     if "page" not in st.session_state:
         st.session_state.page = "Dashboard"
     
-    if "theme" not in st.session_state:
-        st.session_state.theme = "Dark"
+    # Apply dark theme
+    apply_dark_theme()
     
-    # Apply initial theme
-    apply_theme(st.session_state.theme)
-    
-    # Render sidebar first to get theme selection
+    # Render sidebar
     page = render_sidebar()
     
-    # Apply theme again after sidebar is rendered (in case theme changed)
-    apply_theme(st.session_state.theme)
-    
     # Add JavaScript to force dropdown dark mode
-    st.markdown("""
-    <script>
-    function forceThemeMode() {
-        // Check if we're in dark mode by looking at the app background
-        const app = document.querySelector('.stApp');
-        const isDarkMode = app && window.getComputedStyle(app).backgroundColor.includes('14, 17, 23'); // #0E1117
-        
-        if (isDarkMode) {
-            // Dark mode styling
-            const selectboxes = document.querySelectorAll('.stSelectbox');
-            selectboxes.forEach(selectbox => {
-                const allElements = selectbox.querySelectorAll('*');
-                allElements.forEach(element => {
-                    element.style.backgroundColor = '#262730';
-                    element.style.color = '#FF6B6B'; // Orange color for dropdown text
-                });
-            });
-            
-            // Force sidebar dark mode
-            const sidebar = document.querySelector('.stSidebar');
-            if (sidebar) {
-                sidebar.style.backgroundColor = '#262730';
-                sidebar.style.color = '#FAFAFA';
-                
-                const sidebarElements = sidebar.querySelectorAll('*');
-                sidebarElements.forEach(element => {
-                    element.style.backgroundColor = '#262730';
-                    element.style.color = '#FAFAFA';
-                });
-            }
-            
-            // Force main content area to dark mode
-            const mainContent = document.querySelector('.main .block-container');
-            if (mainContent) {
-                mainContent.style.backgroundColor = '#0E1117';
-                mainContent.style.color = '#FAFAFA';
-                
-                const mainElements = mainContent.querySelectorAll('*');
-                mainElements.forEach(element => {
-                    element.style.backgroundColor = '#0E1117';
-                    element.style.color = '#FAFAFA';
-                });
-            }
-            
-            // Force all text elements to light color
-            const textElements = document.querySelectorAll('h1, h2, h3, h4, h5, h6, p, div, span, label');
-            textElements.forEach(element => {
-                element.style.color = '#FAFAFA';
-            });
-        } else {
-            // Light mode styling
-            const selectboxes = document.querySelectorAll('.stSelectbox');
-            selectboxes.forEach(selectbox => {
-                const allElements = selectbox.querySelectorAll('*');
-                allElements.forEach(element => {
-                    element.style.backgroundColor = '#FFFFFF';
-                    element.style.color = '#FF6B6B'; // Orange color for dropdown text
-                });
-            });
-            
-            // Force sidebar light mode
-            const sidebar = document.querySelector('.stSidebar');
-            if (sidebar) {
-                sidebar.style.backgroundColor = '#F0F2F6';
-                sidebar.style.color = '#262730';
-                
-                const sidebarElements = sidebar.querySelectorAll('*');
-                sidebarElements.forEach(element => {
-                    element.style.backgroundColor = '#F0F2F6';
-                    element.style.color = '#262730';
-                });
-            }
-            
-            // Force main content area to light mode
-            const mainContent = document.querySelector('.main .block-container');
-            if (mainContent) {
-                mainContent.style.backgroundColor = '#FFFFFF';
-                mainContent.style.color = '#262730';
-                
-                const mainElements = mainContent.querySelectorAll('*');
-                mainElements.forEach(element => {
-                    element.style.backgroundColor = '#FFFFFF';
-                    element.style.color = '#262730';
-                });
-            }
-            
-            // Force all text elements to dark color
-            const textElements = document.querySelectorAll('h1, h2, h3, h4, h5, h6, p, div, span, label');
-            textElements.forEach(element => {
-                element.style.color = '#262730';
-            });
-        }
-    }
-    
-    // Apply when page loads
-    document.addEventListener('DOMContentLoaded', forceThemeMode);
-    
-    // Apply when Streamlit reruns
-    if (window.parent !== window) {
-        window.parent.addEventListener('load', forceThemeMode);
-    }
-    
-    // Run continuously to catch dynamically created elements
-    setInterval(forceThemeMode, 500);
-    
-    // Also run on any DOM changes
-    const observer = new MutationObserver(forceThemeMode);
-    observer.observe(document.body, { childList: true, subtree: true });
-    </script>
-    """, unsafe_allow_html=True)
+
     
     # Render header
     render_header(config)
@@ -185,6 +87,8 @@ def main() -> None:
         render_dashboard()
     elif page == "Data Explorer":
         render_data_explorer()
+    elif page == "Compound Interest Calculator":
+        render_compound_interest_calculator()
     elif page == "About":
         render_about(config)
 
