@@ -67,5 +67,19 @@ def main() -> None:
         render_about(config)
 
 
+def cli_main():
+    """CLI entry point for the streamlit-app command."""
+    import subprocess
+    import sys
+    import os
+    
+    # Get the directory of this file
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    
+    # Run streamlit with this file
+    cmd = [sys.executable, "-m", "streamlit", "run", os.path.join(current_dir, "main.py")]
+    subprocess.run(cmd)
+
+
 if __name__ == "__main__":
     main()
