@@ -136,6 +136,10 @@ def render_sidebar() -> str:
         st.session_state.page = "Movie Search"
         st.rerun()
     
+    if st.sidebar.button("🤖 AI Chat", key="nav_chat", type="secondary"):
+        st.session_state.page = "AI Chat"
+        st.rerun()
+    
     if st.sidebar.button("ℹ️ About", key="nav_about", type="secondary"):
         st.session_state.page = "About"
         st.rerun()

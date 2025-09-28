@@ -22,6 +22,7 @@ from streamlit_hello_app.modules import (
     render_about,
 )
 from streamlit_hello_app.modules.movie_search import render_movie_search
+from streamlit_hello_app.modules.chat import render_chat_interface
 
 
 def configure_page() -> None:
@@ -92,6 +93,8 @@ def main() -> None:
         render_compound_interest_calculator()
     elif page == "Movie Search":
         render_movie_search()
+    elif page == "AI Chat":
+        render_chat_interface()
     elif page == "About":
         render_about(config)
 

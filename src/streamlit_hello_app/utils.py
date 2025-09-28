@@ -72,6 +72,11 @@ TMDB_API_KEY_VALID = "valid"
 TMDB_API_KEY_INVALID = "invalid"
 TMDB_API_KEY_ERROR = "error"
 
+# OpenAI API Constants
+OPENAI_API_KEY_VALID = "valid"
+OPENAI_API_KEY_INVALID = "invalid"
+OPENAI_API_KEY_ERROR = "error"
+
 
 def get_tmdb_api_key() -> Optional[str]:
     """
@@ -138,3 +143,73 @@ def validate_tmdb_api_key(api_key: Optional[str]) -> str:
     except Exception as e:
         logging.error(f"Unexpected error during TMDB API validation: {e}")
         return TMDB_API_KEY_ERROR
+
+
+def get_openai_api_key() -> Optional[str]:
+    """
+    Get OpenAI API key from environment variable or user input.
+    
+    Returns:
+        API key string if available, None otherwise
+    """
+    # First try to get from environment variable
+    api_key = os.getenv('OPENAI_API_KEY')
+    
+    if api_key:
+        return api_key
+    
+    # If not in environment, ask user for input
+    try:
+        import streamlit as st
+        api_key = st.text_input(
+            "Enter your OpenAI API key:",
+            type="password",
+            help="Get your API key from https://platform.openai.com/api-keys"
+        )
+        return api_key if api_key else None
+    except ImportError:
+        # If streamlit is not available (e.g., in tests), return None
+        return None
+
+
+def validate_openai_api_key(api_key: Optional[str]) -> str:
+    """
+    Validate OpenAI API key by making a test request.
+    
+    Args:
+        api_key: API key to validate
+        
+    Returns:
+        Validation result: 'valid', 'invalid', or 'error'
+    """
+    if not api_key:
+        return OPENAI_API_KEY_ERROR
+    
+    try:
+        # Make a test request to OpenAI API
+        url = "https://api.openai.com/v1/models"
+        headers = {
+            "Authorization": f"Bearer {api_key}",
+            "Content-Type": "application/json"
+        }
+        
+        response = requests.get(url, headers=headers, timeout=10)
+        
+        if response.status_code == 200:
+            # Try to parse JSON to ensure it's a valid response
+            try:
+                response.json()
+                return OPENAI_API_KEY_VALID
+            except ValueError:
+                return OPENAI_API_KEY_ERROR
+        elif response.status_code == 401:
+            return OPENAI_API_KEY_INVALID
+        else:
+            return OPENAI_API_KEY_ERROR
+            
+    except (ConnectionError, Timeout, RequestException) as e:
+        logging.error(f"OpenAI API validation error: {e}")
+        return OPENAI_API_KEY_ERROR
+    except Exception as e:
+        logging.error(f"Unexpected error during OpenAI API validation: {e}")
+        return OPENAI_API_KEY_ERROR
