@@ -114,13 +114,16 @@ streamlit_hello_app/
 │   ├── test_config.py                # Configuration tests
 │   └── test_utils.py                 # Utility function tests
 ├── run_app.py                        # Simple launcher script
+├── requirements.txt                  # Core dependencies for deployment
 ├── Makefile                          # Development commands
 ├── pyproject.toml                    # Project configuration and dependencies
 ├── README.md                         # This file
 ├── LICENSE                           # MIT License
 ├── .gitignore                        # Git ignore rules
 ├── env.example                       # Environment variables example
-└── config.toml.example               # Configuration example
+├── config.toml.example               # Configuration example
+└── .streamlit/
+    └── config.toml                   # Streamlit deployment configuration
 ```
 
 ## ⚙️ Configuration
@@ -238,6 +241,32 @@ python -m build --sdist
 pip install .
 ```
 
+## 🚀 Deployment
+
+### Streamlit Cloud Deployment
+
+1. **Push your code to GitHub**
+2. **Go to [share.streamlit.io](https://share.streamlit.io)**
+3. **Connect your GitHub repository**
+4. **Set the main file path**: `run_app.py`
+5. **Deploy!**
+
+### Other Deployment Platforms
+
+The app can be deployed on any platform that supports Python and Streamlit:
+
+- **Heroku**: Use the included `requirements.txt`
+- **Railway**: Use the included `requirements.txt`
+- **Docker**: Create a Dockerfile with the requirements
+- **AWS/GCP/Azure**: Use container services
+
+### Deployment Files Included
+
+- `requirements.txt`: Core dependencies for deployment
+- `run_app.py`: Simple launcher script for deployment
+- `.streamlit/config.toml`: Streamlit configuration for deployment
+- `pyproject.toml`: Modern Python packaging configuration
+
 ## 🧪 Testing
 
 The project includes a comprehensive test suite with 17 tests covering all core functionality:
@@ -281,6 +310,8 @@ The test suite validates:
 - **Python Version Compatibility**: Updated to support Python 3.11+ while maintaining 3.12+ compatibility
 - **Import Issues**: Fixed relative import errors by converting to absolute imports
 - **Multiple Run Options**: Added simple launcher script and Makefile commands for easier execution
+- **Deployment Dependencies**: Removed problematic `pytest-streamlit` dependency causing deployment failures
+- **Deployment Files**: Added `requirements.txt` and `.streamlit/config.toml` for better deployment support
 
 ## 📝 License
 
