@@ -1,0 +1,28 @@
+# Configuration Example
+# Copy this file to config.toml and customize the values
+
+[app]
+name = "Streamlit Hello App"
+version = "0.1.0"
+debug = false
+
+[theme]
+primary_color = "#FF6B6B"
+background_color = "#FFFFFF"
+secondary_background_color = "#F0F2F6"
+text_color = "#262730"
+
+[database]
+# Example database configuration (uncomment if needed)
+# url = "sqlite:///app.db"
+# echo = false
+
+[api]
+# Example API configuration (uncomment if needed)
+# base_url = "https://api.example.com"
+# timeout = 30
+# retries = 3
+
+[logging]
+level = "INFO"
+format = "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
