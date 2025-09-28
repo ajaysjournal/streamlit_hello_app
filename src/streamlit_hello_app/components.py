@@ -132,6 +132,10 @@ def render_sidebar() -> str:
         st.session_state.page = "Compound Interest Calculator"
         st.rerun()
     
+    if st.sidebar.button("🎬 Movie Search", key="nav_movie_search", type="secondary"):
+        st.session_state.page = "Movie Search"
+        st.rerun()
+    
     if st.sidebar.button("ℹ️ About", key="nav_about", type="secondary"):
         st.session_state.page = "About"
         st.rerun()

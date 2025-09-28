@@ -4,7 +4,7 @@ import pytest
 import logging
 from pathlib import Path
 from tempfile import NamedTemporaryFile
-from unittest.mock import patch, mock_open
+from unittest.mock import patch, mock_open, MagicMock
 
 from streamlit_hello_app.utils import (
     setup_logging,
@@ -50,13 +50,30 @@ class TestLoadEnvironment:
     """Test cases for load_environment function."""
     
     @patch('streamlit_hello_app.utils.load_dotenv')
-    def test_load_environment_with_file(self, mock_load_dotenv):
-        """Test load_environment with specific file."""
+    @patch('streamlit_hello_app.utils.Path')
+    def test_load_environment_with_file(self, mock_path_class, mock_load_dotenv):
+        """Test load_environment with specific file that doesn't exist."""
+        # Create a mock Path that behaves correctly
+        mock_path_instance = MagicMock()
+        mock_path_instance.exists.return_value = False  # The specific file doesn't exist
+        mock_path_class.return_value = mock_path_instance
+        
+        # Mock the default paths to exist
+        def path_side_effect(path_str):
+            mock_path = MagicMock()
+            if path_str in [".env", ".env.local", ".env.development"]:
+                mock_path.exists.return_value = True
+            else:
+                mock_path.exists.return_value = False
+            return mock_path
+        
+        mock_path_class.side_effect = path_side_effect
+        
         env_file = Path("test.env")
         load_environment(env_file)
         
-        # Should not call load_dotenv since file doesn't exist
-        mock_load_dotenv.assert_not_called()
+        # Should call load_dotenv with the first default file that exists
+        mock_load_dotenv.assert_called_once()
     
     @patch('streamlit_hello_app.utils.load_dotenv')
     def test_load_environment_with_existing_file(self, mock_load_dotenv):

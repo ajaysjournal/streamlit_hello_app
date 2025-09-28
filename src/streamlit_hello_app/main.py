@@ -21,6 +21,7 @@ from streamlit_hello_app.modules import (
     render_compound_interest_calculator,
     render_about,
 )
+from streamlit_hello_app.modules.movie_search import render_movie_search
 
 
 def configure_page() -> None:
@@ -89,6 +90,8 @@ def main() -> None:
         render_data_explorer()
     elif page == "Compound Interest Calculator":
         render_compound_interest_calculator()
+    elif page == "Movie Search":
+        render_movie_search()
     elif page == "About":
         render_about(config)
 
