@@ -78,13 +78,13 @@ pip install -e ".[dev]"
 You have several options to run the application:
 
 ```bash
-# Option 1: Using the package script (recommended)
+# Option 1: Using the package script (recommended after pip install -e .)
 streamlit-app
 
-# Option 2: Using the simple launcher script
+# Option 2: Using the simple launcher script (easiest)
 streamlit run run_app.py
 
-# Option 3: Directly with Streamlit (requires proper PYTHONPATH)
+# Option 3: Directly with Streamlit (now works with absolute imports)
 streamlit run src/streamlit_hello_app/main.py
 
 # Option 4: Using Makefile commands
@@ -95,9 +95,50 @@ make run-package      # Using package script
 
 The application will start and be available at `http://localhost:8501`
 
+> **Note**: The `streamlit-app` command requires the package to be installed in development mode (`pip install -e .`). If you haven't done this yet, use one of the other options.
+
 ### 5. Open Your Browser
 
 Navigate to `http://localhost:8501` in your browser to view the application.
+
+## 🛑 Stopping the Streamlit Server
+
+When you're done with the application, you can stop the Streamlit server using several methods:
+
+### Method 1: If running in foreground
+If you started Streamlit in the foreground (not in background), simply press:
+- **Ctrl + C** (on Mac/Linux)
+- **Ctrl + Break** (on Windows)
+
+### Method 2: Kill all Streamlit processes
+```bash
+pkill -f streamlit
+```
+This kills all processes containing "streamlit" in their command line.
+
+### Method 3: Kill by port
+```bash
+lsof -ti:8501 | xargs kill
+```
+This finds the process using port 8501 and kills it.
+
+### Method 4: More specific process killing
+```bash
+pkill -f "streamlit run"
+```
+This only kills processes that match "streamlit run" specifically.
+
+### Method 5: If you know the process ID
+```bash
+kill <PID>
+```
+Replace `<PID>` with the actual process ID from `ps aux | grep streamlit`.
+
+### Verification
+You can verify the server is stopped by:
+1. **Check processes**: `ps aux | grep streamlit` (should show no streamlit processes)
+2. **Check port**: `lsof -i:8501` (should show port 8501 is free)
+3. **Try accessing**: `http://localhost:8501` (should show connection refused)
 
 ## 📁 Project Structure
 
@@ -312,6 +353,7 @@ The test suite validates:
 - **Multiple Run Options**: Added simple launcher script and Makefile commands for easier execution
 - **Deployment Dependencies**: Removed problematic `pytest-streamlit` dependency causing deployment failures
 - **Deployment Files**: Added `requirements.txt` and `.streamlit/config.toml` for better deployment support
+- **Package Script**: Fixed `streamlit-app` command by creating proper CLI entry point function
 
 ## 📝 License
 
